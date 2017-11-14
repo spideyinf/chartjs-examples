@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>Line Chart</title>
+  <script src="../../../dist/Chart.bundle.js"></script>
+  <script src="../../utils.js"></script>
+</head>
+
+<body>
+  
+  <div class="content">
+    <div class="wrapper"><canvas id="chart-0"></canvas></div>
+  </div>
+  <br>
+  <div class="toolbar">
+    <button class="btn" id="randomizeData">Randomize Data</button>
+    <button class="btn" id="addDataset">Add Dataset</button>
+    <button class="btn" id="removeDataset">Remove Dataset</button>
+    <button class="btn" id="addData">Add Data</button>
+    <button class="btn" id="remove Data">Remove Data</button>
+  </div>
+
+  <script>
+    let presets = window.chartColors;
+    let utils = Samples.utils;
+
+    let config = {
+      type: 'line',
+      data: {
+        labels: months,
+        datasets: [
+          {
+            label: 'D1',
+            boderColor: presets.red,
+            backgroundColor: presets.red,
+            data: [
+              randomScalingFactor(),
+              randomScalingFactor(),
+              randomScalingFactor(),
+              randomScalingFactor(),
+              randomScalingFactor(),
+              randomScalingFactor(),
+              randomScalingFactor()
+            ]
+          },
+          {
+            label: 'D2',
+            boderColor: presets.blue,
+            backgroundColor: presets.blue,
+            data: [
+              randomScalingFactor(),
+              randomScalingFactor(),
+              randomScalingFactor(),
+              randomScalingFactor(),
+              randomScalingFactor(),
+              randomScalingFactor(),
+              randomScalingFactor()
+            ]
+          },
+          {
+            label: 'D3',
+            boderColor: presets.green,
+            backgroundColor: presets.green,
+            data: [
+              randomScalingFactor(),
+              randomScalingFactor(),
+              randomScalingFactor(),
+              randomScalingFactor(),
+              randomScalingFactor(),
+              randomScalingFactor(),
+              randomScalingFactor()
+            ]
+          },
+          {
+            label: 'D4',
+            boderColor: presets.yellow,
+            backgroundColor: presets.yellow,
+            data: [
+              randomScalingFactor(),
+              randomScalingFactor(),
+              randomScalingFactor(),
+              randomScalingFactor(),
+              randomScalingFactor(),
+              randomScalingFactor(),
+              randomScalingFactor()
+            ]
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        title: {
+          display: true,
+          text: 'Chart.js Line chart - Stacked Area'
+        },
+        tooltips: {
+          mode: 'index'
+        },
+        hover: {
+          mode: 'index'
+        },
+        scales: {
+          xAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Month'
+            }
+          }],
+          yAxes: [{
+            stacked: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'Value'
+            }
+          }]
+        }
+      }
+    };
+
+    window.onload = function() {
+      let ctx = document.getElementById('chart-0').getContext('2d');
+      window.myLine = new Chart(ctx, config);
+    };
+
+    document.getElementById('randomizeData').addEventListener('click', function() {
+      config.data.datasets.forEach(function(dataset) {
+        dataset.data = dataset.data.map(function() {
+          return randomScalingFactor();
+        });
+      });
+
+      window.myline.update();
+    });
+
+    
+
+  </script>
+</body>

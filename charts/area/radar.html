@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>area > radar | Chart.js sample</title>
+  <link rel="stylesheet" type="text/css" href="../../style.css">
+  <script src="../../../dist/Chart.bundle.js"></script>
+  <script src="../../utils.js"></script>
+  <script src="analyser.js"></script>
+</head>
+
+<body>
+  <div class="content">
+    <div class="wrapper" style="max-width: 512px; margin: auto">
+      <canvas id="chart-0"></canvas>
+    </div>
+
+    <div class="toolbar">
+      <button onclick="togglePropagate(this)">Propagate</button>
+      <button onclick="toggleSmooth(this)">Smooth</button>
+      <button onclick="randomize(this)">Randomize</button>
+    </div>
+
+    <div id="chart-analyser" class="analyser"></div>
+  </div>
+
+  <script>
+    let presets = window.chartColors;
+    let utils = Samples.utils;
+    let inputs = {
+      min: 5,
+      max: 15,
+      count: 8,
+      decimals: 2,
+      continuity: 1
+    };
+
+    function generateData() {
+      // Radar chart doesn't suport stacked values, let's do it manually
+
+      let values = utils.numbers(inputs);
+      inputs.from = values;
+      return values;
+    }
+
+    function generateLabels(config) {
+      return utils.months({count: inputs.count});
+    }
+
+    utils.srand(42);
+
+    let data = {
+      labels: generateLabels(),
+      datasets: [
+        {
+          backgroundColor: utils.transparentize(presets.red),
+          borderColor: presets.red,
+          data: generateData(),
+          label: 'D0'
+        },
+        {
+          backgroundColor: utils.transparentize(presets.orange),
+          borderColor: presets.orange,
+          data: generateData(),
+          hidden: true,
+          label: 'D1',
+          fill: '-1'
+        },
+        {
+          backgroundColor: utils.transparentize(presets.yellow),
+          borderColor: presets.yellow,
+          data: generateData(),
+          label: 'D2',
+          fill: 1
+        }
+      ]
+    };
+
+    let options = {
+      maintainAspectRatio: true,
+      spanGaps: false,
+      elements: {
+        line: {
+          tension: 0.00001
+        }
+      },
+      plugins: {
+        filter: {
+          propagate: false
+        },
+        samples_filter_analyser: {
+          target: 'chart-analyser'
+        }
+      }
+    };
+
+    let chart = new Chart('chart-0', {
+      type: 'radar',
+      data: data,
+      options: options
+    });
+
+    //Functions to use
+
+    function togglePropagate(btn) {
+      let value = btn.classList.toggle('btn-on');
+      chart.options.plugins.filler.propagate = value;
+      chart.update()
+    }
+
+    function toggleSmooth(btn) {
+      let value = btn.classList.toggle('btn-on');
+      chart.options.elements.line.tension = value ? 0.4 : 0.00001;
+      chart.update();
+    }
+
+    function randomize() {
+      inputs.from= [];
+      chart.data.datasets.forEach(function(dataset) {
+        dataset.data = generateData();
+      });
+      chart.update();
+    }
+
+  </script>
+</body>

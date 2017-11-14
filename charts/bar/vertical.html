@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>bar > vertical | Chart.js sample</title>
+  <link rel="stylesheet" type="text/css" href="../../style.css">
+  <script src="../../../dist/Chart.bundle.js"></script>
+  <script src="../../utils.js"></script>
+</head>
+<body>
+  <div class="content">
+    <div class="wrapper">
+      <canvas id="chart-0"></canvas>
+    </div>
+    <div class="toolbar">
+      <button onclick="randomizeData(this)">Randomize Data</button>
+      <button onclick="addDataset(this)">Add Dataset</button>
+      <button onclick="removeDataset(this)">Remove Dataset</button>
+      <button onclick="addData(this)">Add Data</button>
+      <button onclick="removeData(this)">Remove Data</button>
+    </div>
+  </div>
+
+  <script>
+
+    let presets = window.chartColors;
+    let utils = Samples.utils;
+    let inputs = {
+      min: -50,
+      max: 100,
+      count: 5,
+      decimals: 1,
+      continuity: 1
+    };
+
+    function generateData() {
+      return utils.numbers(inputs);
+    }
+
+    function generateLabels(config) {
+      return utils.months({count: inputs.count});
+    }
+
+    utils.srand(25);
+
+    let barChartData = {
+      labels: generateLabels(),
+      datasets: [
+        {
+          backgroundColor: utils.transparentize(presets.red),
+          borderColor: presets.red,
+          borderWidth: 1,
+          data: generateData(),
+          hidden: true,
+          label: 'D0'
+        },
+        {
+          backgroundColor: utils.transparentize(presets.orange),
+          borderColor: presets.orange,
+          borderWidth: 1,
+          data: generateData(),
+          hidden: false,
+          label: 'D1',
+          fill: '-1'
+        },
+        {
+          backgroundColor: utils.transparentize(presets.yellow),
+          borderColor: presets.yellow,
+          borderWidth: 1,
+          data: generateData(),
+          hidden: true,
+          label: 'D2',
+          fill: 1
+        },
+        {
+          backgroundColor: utils.transparentize(presets.green),
+          borderColor: presets.green,
+          borderWidth: 1,
+          data: generateData(),
+          label: 'D3',
+          fill: '-1'
+        },
+        {
+          backgroundColor: utils.transparentize(presets.blue),
+          borderColor: presets.blue,
+          borderWidth: 1,
+          data: generateData(),
+          label: 'D4',
+          fill: '-1'
+        }
+      ]
+    };
+
+    let chart = new Chart('chart-0', {
+      type: 'bar',
+      data: barChartData,
+      options: {
+        responsive: true,
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'Bar Chart | Chart.js',
+          fontSize: 16
+        }
+      }
+    });
+
+    function randomizeData(btn) {
+      chart.data.datasets.forEach(function(dataset) {
+        dataset.data = generateData();
+      });
+      chart.update();
+    }
+
+    function addDataset(btn) {
+      let colorNames = Object.keys(presets);
+      let colorName = colorNames[barChartData.datasets.length % colorNames.length];
+      let newDataset = {
+        label: 'D' + barChartData.datasets.length,
+        backgroundColor: presets[colorName],
+        borderColor: presets[colorName],
+        borderWidth: 1,
+        data: []
+      };
+
+      for (var i = 0; i < barChartData.labels.length; i++) {
+        newDataset.data.push(randomScalingFactor());
+      };
+
+      barChartData.datasets.push(newDataset);
+      chart.update();
+    }
+
+    function addData(btn) {
+      if (barChartData.datasets.length > 0) {
+        let month = Months[barChartData.labels.length % Months.length];
+        barChartData.labels.push(month);
+
+        for (var i = 0; i < barChartData.datasets.length; i++) {
+          barChartData.datasets[i].data.push(randomScalingFactor());
+        }
+      }
+      chart.update();
+    };
+
+    function removeDataset(btn) {
+      barChartData.datasets.splice(-1, 1);
+      chart.update();
+    };
+
+    function removeData(btn) {
+      barChartData.labels.splice(-1, 1);
+      barChartData.datasets.forEach(function(dataset, datasetIndex) {
+        dataset.data.pop();
+      });
+
+      chart.update();
+    };
+
+  </script>
+</body>
