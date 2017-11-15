@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>bar > horizontal | Chart.js sample</title>
+  <title>line > basic | Chart.js sample</title>
   <link rel="stylesheet" type="text/css" href="../../style.css">
   <script src="../../../dist/Chart.bundle.js"></script>
   <script src="../../utils.js"></script>
@@ -28,8 +28,8 @@
     let presets = window.chartColors;
     let utils = Samples.utils;
     let inputs = {
-      min: -50,
-      max: 50,
+      min: -100,
+      max: 100,
       count: 5,
       decimals: 1,
       continuity: 1
@@ -43,125 +43,135 @@
       return utils.months({count: inputs.count});
     }
 
-    utils.srand(25);
+    utils.srand(65);
 
-    let barChartData = {
+    let lineChartData = {
       labels: generateLabels(),
       datasets: [
         {
           backgroundColor: utils.transparentize(presets.red),
           borderColor: presets.red,
-          borderWidth: 1,
           data: generateData(),
-          hidden: true,
-          label: 'D0'
+          label: 'D0',
+          fill: false
         },
         {
           backgroundColor: utils.transparentize(presets.orange),
           borderColor: presets.orange,
-          borderWidth: 1,
           data: generateData(),
           hidden: false,
           label: 'D1',
-          fill: '-1'
+          fill: false
         },
         {
           backgroundColor: utils.transparentize(presets.yellow),
           borderColor: presets.yellow,
-          borderWidth: 1,
           data: generateData(),
-          hidden: true,
           label: 'D2',
-          fill: 1
+          fill: false
         },
         {
           backgroundColor: utils.transparentize(presets.green),
           borderColor: presets.green,
-          borderWidth: 1,
           data: generateData(),
           label: 'D3',
-          fill: '-1'
+          fill: false
         },
         {
           backgroundColor: utils.transparentize(presets.blue),
           borderColor: presets.blue,
-          borderWidth: 1,
           data: generateData(),
           label: 'D4',
-          fill: '-1'
+          fill: false
         }
       ]
     };
 
     let chart = new Chart('chart-0', {
-      type: 'horizontalBar',
-      data: barChartData,
+      type: 'line',
+      data: lineChartData,
       options: {
-        elements: {
-          rectangle: {
-            borderWidth: 2,
-          }
-        },
         responsive: true,
         legend: {
-          position: 'right',
+          position: 'top'
         },
         title: {
           display: true,
-          text: 'Horizontal Bar Chart | Chart.js',
+          text: 'Basic Line Chart | Chart.js',
           fontSize: 16
+        },
+        hover: {
+          mode: 'nearest',
+          intersect: true
+        },
+        scales: {
+          xAxes: [{
+            display: true,
+            scaleLabel: {
+              display: true,
+              fontSize: 14,
+              labelString: 'Month'
+            }
+          }],
+          yAxes: [{
+            display: true,
+            scaleLabel: {
+              display: true,
+              fontSize: 14,
+              labelString: 'Value'
+            }
+          }]
         }
       }
     });
 
     function randomizeData(btn) {
-      barChartData.datasets.forEach(function(dataset) {
+      lineChartData.datasets.forEach(function(dataset) {
         dataset.data = dataset.data.map(() => randomScalingFactor());
       });
 
       chart.update();
     };
-  
 
     function addDataset(btn) {
       let colorNames = Object.keys(presets);
-      let colorName = colorNames[barChartData.datasets.length % colorNames.length];
+      let colorName = colorNames[lineChartData.datasets.length % colorNames.length];
       let newDataset = {
-        label: 'D' + barChartData.datasets.length,
+        label: 'D' + lineChartData.datasets.length,
         backgroundColor: presets[colorName],
         borderColor: presets[colorName],
-        borderWidth: 1,
+        fill: 'false',
         data: []
       };
 
-      for (var i = 0; i < barChartData.labels.length; i++) {
+      for (var i = 0; i < lineChartData.labels.length; i++) {
         newDataset.data.push(randomScalingFactor());
       };
 
-      barChartData.datasets.push(newDataset);
+      lineChartData.datasets.push(newDataset);
       chart.update();
-    };
+    }
 
     function addData(btn) {
-      if (barChartData.datasets.length > 0) {
-        let month = Months[barChartData.labels.length % Months.length];
-        barChartData.labels.push(month);
+      if (lineChartData.datasets.length > 0) {
+        let month = Months[lineChartData.labels.length % Months.length];
+        lineChartData.labels.push(month);
 
-        for (var i = 0; i < barChartData.datasets.length; i++) {
-          barChartData.datasets[i].data.push(randomScalingFactor());
+        for (var i = 0; i < lineChartData.datasets.length; i++) {
+          lineChartData.datasets[i].data.push(randomScalingFactor());
         }
       }
       chart.update();
     };
 
     function removeDataset(btn) {
-      barChartData.datasets.splice(-1, 1);
+      lineChartData.datasets.splice(-1, 1);
       chart.update();
     };
 
     function removeData(btn) {
-      barChartData.labels.splice(-1, 1);
-      barChartData.datasets.forEach(function(dataset, datasetIndex) {
+      lineChartData.labels.splice(-1, 1);
+      lineChartData.datasets.forEach(function(dataset, datasetIndex) {
         dataset.data.pop();
       });
 

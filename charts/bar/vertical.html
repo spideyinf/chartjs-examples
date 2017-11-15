@@ -110,11 +110,12 @@
     });
 
     function randomizeData(btn) {
-      chart.data.datasets.forEach(function(dataset) {
-        dataset.data = generateData();
+      barChartData.datasets.forEach(function(dataset) {
+        dataset.data = dataset.data.map(() => randomScalingFactor());
       });
+
       chart.update();
-    }
+    };
 
     function addDataset(btn) {
       let colorNames = Object.keys(presets);

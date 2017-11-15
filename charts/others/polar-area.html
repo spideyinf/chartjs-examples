@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>others > polar area | Chart.js sample</title>
+  <link rel="stylesheet" type="text/css" href="../../style.css">
+  <script src="../../../dist/Chart.bundle.js"></script>
+  <script src="../../utils.js"></script>
+</head>
+<body>
+  <div class="content">
+    <div class="wrapper">
+      <canvas id="chart-0"></canvas>
+    </div>
+    <div class="toolbar">
+      <button onclick="randomizeData(this)">Randomize Data</button>
+      <button onclick="addData(this)">Add Data</button>
+      <button onclick="removeData(this)">Remove Data</button>
+    </div>
+  </div>
+
+  <script>
+
+    let randomScalingFactor = function() {
+      return Math.round(Math.random() * 50);
+    };
+    
+    let presets = window.chartColors;
+    let utils = Samples.utils;
+    let inputs = {
+      min: 0,
+      max: 50,
+      count: 5,
+      decimals: 1,
+      continuity: 1
+    };
+
+    function generateData() {
+      return utils.numbers(inputs);
+    }
+
+    function generateLabels(config) {
+      return utils.months({count: inputs.count});
+    }
+
+    utils.srand(22);
+
+    let config = {
+      labels: generateLabels(),
+      datasets: [
+        {
+          backgroundColor: [
+            utils.transparentize(presets.red),
+            utils.transparentize(presets.orange),
+            utils.transparentize(presets.yellow),
+            utils.transparentize(presets.green),
+            utils.transparentize(presets.blue)
+          ],
+          data: generateData(),
+          label: 'D0'
+        }
+      ]
+    };
+
+    let chart = new Chart('chart-0', {
+      type: 'polarArea',
+      data: config,
+      options: {
+        responsive: true,
+        legend: {
+          position: 'right',
+        },
+        title: {
+          display: true,
+          text: 'Polar Area Chart | Chart.js',
+          fontSize: 16
+        },
+        scale: {
+          ticks: {
+            beginAtZero: true
+          },
+          reverse: false
+        },
+        animation: {
+            animateScale: true,
+            animateRotate: true
+        }
+      }
+    });
+
+    function randomizeData(btn) {
+      config.datasets.forEach(function(dataset) {
+        dataset.data = dataset.data.map(() => randomScalingFactor());
+      });
+
+      chart.update();
+    };
+  
+    let colorNames = Object.keys(presets);
+
+    function addDataset(btn) {
+      let newDataset = {
+        label: 'D' + config.datasets.length,
+        backgroundColor: [],
+        data: []
+      };
+
+      for (var i = 0; i < config.labels.length; i++) {
+        newDataset.data.push(randomScalingFactor());
+
+        let colorName = colorNames[i % colorNames.length];
+        newDataset.backgroundColor.push(utils.transparentize(presets[colorName]));
+      };
+
+      config.datasets.push(newDataset);
+      chart.update();
+    };
+
+    function addData(btn) {
+      if (config.datasets.length > 0) {
+        let month = Months[config.labels.length % Months.length];
+        config.labels.push(month);
+
+        let colorName = colorNames[config.datasets[0].data.length % colorNames.length];
+
+        config.datasets.forEach(function(dataset) {
+          dataset.data.push(randomScalingFactor());
+          dataset.backgroundColor.push(utils.transparentize(presets[colorName]));
+        });
+      }
+
+      chart.update();
+    };
+
+    function removeDataset(btn) {
+      config.datasets.splice(-1, 1);
+      chart.update();
+    };
+
+    function removeData(btn) {
+      config.labels.splice(-1, 1);
+      config.datasets.forEach(function(dataset) {
+        dataset.data.pop();
+        dataset.backgroundColor.pop();
+      });
+
+      chart.update();
+    };
+
+  </script>
+</body>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>others > doughnut | Chart.js sample</title>
+  <link rel="stylesheet" type="text/css" href="../../style.css">
+  <script src="../../../dist/Chart.bundle.js"></script>
+  <script src="../../utils.js"></script>
+</head>
+<body>
+  <div class="content">
+    <div class="wrapper">
+      <canvas id="chart-0"></canvas>
+    </div>
+    <div class="toolbar">
+      <button onclick="randomizeData(this)">Randomize Data</button>
+      <button onclick="addDataset(this)">Add Dataset</button>
+      <button onclick="removeDataset(this)">Remove Dataset</button>
+      <button onclick="addData(this)">Add Data</button>
+      <button onclick="removeData(this)">Remove Data</button>
+    </div>
+  </div>
+
+  <script>
+
+    let randomScalingFactor = function() {
+      return Math.round(Math.random() * 100);
+    };
+    
+    let presets = window.chartColors;
+    let utils = Samples.utils;
+    let inputs = {
+      min: 0,
+      max: 100,
+      count: 5,
+      decimals: 1,
+      continuity: 1
+    };
+
+    function generateData() {
+      return utils.numbers(inputs);
+    }
+
+    function generateLabels(config) {
+      return utils.months({count: inputs.count});
+    }
+
+    utils.srand(25);
+
+    let doughnutChartData = {
+      labels: generateLabels(),
+      datasets: [
+        {
+          backgroundColor: [
+            presets.red,
+            presets.orange,
+            presets.yellow,
+            presets.green,
+            presets.blue,
+          ],
+          data: generateData(),
+          label: 'D0'
+        }
+      ]
+    };
+
+    let chart = new Chart('chart-0', {
+      type: 'doughnut',
+      data: doughnutChartData,
+      options: {
+        responsive: true,
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'Doughnut Chart | Chart.js',
+          fontSize: 16
+        },
+        animation: {
+            animateScale: true,
+            animateRotate: true
+        }
+      }
+    });
+
+    function randomizeData(btn) {
+      doughnutChartData.datasets.forEach(function(dataset) {
+        dataset.data = dataset.data.map(() => randomScalingFactor());
+      });
+
+      chart.update();
+    };
+  
+    let colorNames = Object.keys(presets);
+
+    function addDataset(btn) {
+      let newDataset = {
+        label: 'D' + doughnutChartData.datasets.length,
+        backgroundColor: [],
+        data: []
+      };
+
+      for (var i = 0; i < doughnutChartData.labels.length; i++) {
+        newDataset.data.push(randomScalingFactor());
+
+        let colorName = colorNames[i % colorNames.length];
+        newDataset.backgroundColor.push(presets[colorName]);
+      };
+
+      doughnutChartData.datasets.push(newDataset);
+      chart.update();
+    };
+
+    function addData(btn) {
+      if (doughnutChartData.datasets.length > 0) {
+        let month = Months[doughnutChartData.labels.length % Months.length];
+        doughnutChartData.labels.push(month);
+
+        let colorName = colorNames[doughnutChartData.datasets[0].data.length % colorNames.length];
+
+        doughnutChartData.datasets.forEach(function(dataset) {
+          dataset.data.push(randomScalingFactor());
+          dataset.backgroundColor.push(presets[colorName]);
+        });
+      }
+
+      chart.update();
+    };
+
+    function removeDataset(btn) {
+      doughnutChartData.datasets.splice(-1, 1);
+      chart.update();
+    };
+
+    function removeData(btn) {
+      doughnutChartData.labels.splice(-1, 1);
+      doughnutChartData.datasets.forEach(function(dataset) {
+        dataset.data.pop();
+        dataset.backgroundColor.pop();
+      });
+
+      chart.update();
+    };
+
+  </script>
+</body>

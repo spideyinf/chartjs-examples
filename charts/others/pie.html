@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>others > pie | Chart.js sample</title>
+  <link rel="stylesheet" type="text/css" href="../../style.css">
+  <script src="../../../dist/Chart.bundle.js"></script>
+  <script src="../../utils.js"></script>
+</head>
+<body>
+  <div class="content">
+    <div class="wrapper">
+      <canvas id="chart-0"></canvas>
+    </div>
+    <div class="toolbar">
+      <button onclick="randomizeData(this)">Randomize Data</button>
+      <button onclick="addDataset(this)">Add Dataset</button>
+      <button onclick="removeDataset(this)">Remove Dataset</button>
+      <button onclick="addData(this)">Add Data</button>
+      <button onclick="removeData(this)">Remove Data</button>
+    </div>
+  </div>
+
+  <script>
+
+    let randomScalingFactor = function() {
+      return Math.round(Math.random() * 100);
+    };
+    
+    let presets = window.chartColors;
+    let utils = Samples.utils;
+    let inputs = {
+      min: 0,
+      max: 100,
+      count: 5,
+      decimals: 1,
+      continuity: 1
+    };
+
+    function generateData() {
+      return utils.numbers(inputs);
+    }
+
+    function generateLabels(config) {
+      return utils.months({count: inputs.count});
+    }
+
+    utils.srand(25);
+
+    let pieChartData = {
+      labels: generateLabels(),
+      datasets: [
+        {
+          backgroundColor: [
+            presets.red,
+            presets.orange,
+            presets.yellow,
+            presets.green,
+            presets.blue,
+          ],
+          data: generateData(),
+          label: 'D0'
+        }
+      ]
+    };
+
+    let chart = new Chart('chart-0', {
+      type: 'pie',
+      data: pieChartData,
+      options: {
+        responsive: true,
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'Pie Chart | Chart.js',
+          fontSize: 16
+        },
+        animation: {
+            animateScale: true,
+            animateRotate: true
+        }
+      }
+    });
+
+    function randomizeData(btn) {
+      pieChartData.datasets.forEach(function(dataset) {
+        dataset.data = dataset.data.map(() => randomScalingFactor());
+      });
+
+      chart.update();
+    };
+  
+    let colorNames = Object.keys(presets);
+
+    function addDataset(btn) {
+      let newDataset = {
+        label: 'D' + pieChartData.datasets.length,
+        backgroundColor: [],
+        data: []
+      };
+
+      for (var i = 0; i < pieChartData.labels.length; i++) {
+        newDataset.data.push(randomScalingFactor());
+
+        let colorName = colorNames[i % colorNames.length];
+        newDataset.backgroundColor.push(presets[colorName]);
+      };
+
+      pieChartData.datasets.push(newDataset);
+      chart.update();
+    };
+
+    function addData(btn) {
+      if (pieChartData.datasets.length > 0) {
+        let month = Months[pieChartData.labels.length % Months.length];
+        pieChartData.labels.push(month);
+
+        let colorName = colorNames[pieChartData.datasets[0].data.length % colorNames.length];
+
+        pieChartData.datasets.forEach(function(dataset) {
+          dataset.data.push(randomScalingFactor());
+          dataset.backgroundColor.push(presets[colorName]);
+        });
+      }
+
+      chart.update();
+    };
+
+    function removeDataset(btn) {
+      pieChartData.datasets.splice(-1, 1);
+      chart.update();
+    };
+
+    function removeData(btn) {
+      pieChartData.labels.splice(-1, 1);
+      pieChartData.datasets.forEach(function(dataset) {
+        dataset.data.pop();
+        dataset.backgroundColor.pop();
+      });
+
+      chart.update();
+    };
+
+  </script>
+</body>

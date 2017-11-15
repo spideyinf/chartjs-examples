@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>line > stepped | Chart.js sample</title>
+  <link rel="stylesheet" type="text/css" href="../../style.css">
+  <script src="../../../dist/Chart.bundle.js"></script>
+  <script src="../../utils.js"></script>
+</head>
+<body>
+  <div class="content">
+    <div class="wrapper col-2">
+      <canvas id="chart-0"></canvas>
+    </div>
+    <div class="wrapper col-2">
+      <canvas id="chart-1"></canvas>
+    </div>
+    <div class="wrapper col-2">
+      <canvas id="chart-2"></canvas>
+    </div>
+    <div class="wrapper col-2">
+      <canvas id="chart-3"></canvas>
+    </div>
+
+    <div class="toolbar">
+      <button onclick="randomize(this)">Randomize</button>
+    </div>
+  </div>
+
+  <script>
+    let presets = window.chartColors;
+    let utils = Samples.utils;
+    let inputs = {
+      min: -100,
+      max: 100,
+      count: 9,
+      decimals: 2,
+      continuity: 1
+    };
+
+    function generateData(config) {
+      return utils.numbers(Chart.helpers.merge(inputs, config || {}));
+    }
+
+    function generateLabels(config) {
+      return utils.months(Chart.helpers.merge({
+        count: inputs.count,
+        section: 3
+      }, config || {}));
+    }
+
+
+    [false, true, 'before', 'after'].forEach(function(stepped, index) {
+
+      // Reset the random seed
+
+      utils.srand(8);
+
+      new Chart('chart-' + index, {
+        type: 'line',
+        data: {
+          labels: generateLabels(),
+          datasets: [{
+            fill: false,
+            borderColor: presets.blue,
+            data: generateData(),
+            label: 'Dataset',
+            steppedLine: stepped
+          }]
+        },
+        options: {
+          maintainAspectRatio: false,
+          spanGaps: false,
+          elements: {
+            line: {
+              tension: 0.000001
+            }
+          },
+          title: {
+            display: true,
+            text: 'steppedLine: ' + stepped
+          }
+        }
+      });
+    });
+
+    function randomize() {
+      let seed = utils.rand();
+      Chart.helpers.each(Chart.instances, function(chart) {
+        utils.srand(seed);
+
+        chart.data.datasets.forEach(function(dataset) {
+          dataset.data = generateData();
+        });
+        chart.update();
+      });
+    }
+  </script>
+</body>

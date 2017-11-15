@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>bar > horizontal | Chart.js sample</title>
+  <title>bar > stacked | Chart.js sample</title>
   <link rel="stylesheet" type="text/css" href="../../style.css">
   <script src="../../../dist/Chart.bundle.js"></script>
   <script src="../../utils.js"></script>
@@ -28,10 +28,10 @@
     let presets = window.chartColors;
     let utils = Samples.utils;
     let inputs = {
-      min: -50,
-      max: 50,
+      min: -100,
+      max: 100,
       count: 5,
-      decimals: 1,
+      decimals: 2,
       continuity: 1
     };
 
@@ -43,7 +43,7 @@
       return utils.months({count: inputs.count});
     }
 
-    utils.srand(25);
+    utils.srand(35);
 
     let barChartData = {
       labels: generateLabels(),
@@ -51,15 +51,13 @@
         {
           backgroundColor: utils.transparentize(presets.red),
           borderColor: presets.red,
-          borderWidth: 1,
           data: generateData(),
-          hidden: true,
+          hidden: false,
           label: 'D0'
         },
         {
           backgroundColor: utils.transparentize(presets.orange),
           borderColor: presets.orange,
-          borderWidth: 1,
           data: generateData(),
           hidden: false,
           label: 'D1',
@@ -68,48 +66,39 @@
         {
           backgroundColor: utils.transparentize(presets.yellow),
           borderColor: presets.yellow,
-          borderWidth: 1,
           data: generateData(),
-          hidden: true,
+          hidden: false,
           label: 'D2',
           fill: 1
-        },
-        {
-          backgroundColor: utils.transparentize(presets.green),
-          borderColor: presets.green,
-          borderWidth: 1,
-          data: generateData(),
-          label: 'D3',
-          fill: '-1'
-        },
-        {
-          backgroundColor: utils.transparentize(presets.blue),
-          borderColor: presets.blue,
-          borderWidth: 1,
-          data: generateData(),
-          label: 'D4',
-          fill: '-1'
         }
       ]
     };
 
     let chart = new Chart('chart-0', {
-      type: 'horizontalBar',
+      type: 'bar',
       data: barChartData,
       options: {
-        elements: {
-          rectangle: {
-            borderWidth: 2,
-          }
-        },
         responsive: true,
         legend: {
-          position: 'right',
+          position: 'top',
+          lineWidth: 0
         },
         title: {
           display: true,
-          text: 'Horizontal Bar Chart | Chart.js',
+          text: 'Stacked Bar Chart | Chart.js',
           fontSize: 16
+        },
+        tooltips: {
+          mode: 'index',
+          intersect: false
+        },
+        scales: {
+          xAxes: [{
+            stacked: true,
+          }],
+          yAxes: [{
+            stacked: true,
+          }]
         }
       }
     });
@@ -121,7 +110,6 @@
 
       chart.update();
     };
-  
 
     function addDataset(btn) {
       let colorNames = Object.keys(presets);
@@ -130,7 +118,6 @@
         label: 'D' + barChartData.datasets.length,
         backgroundColor: presets[colorName],
         borderColor: presets[colorName],
-        borderWidth: 1,
         data: []
       };
 
@@ -140,7 +127,7 @@
 
       barChartData.datasets.push(newDataset);
       chart.update();
-    };
+    }
 
     function addData(btn) {
       if (barChartData.datasets.length > 0) {

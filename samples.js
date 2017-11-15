@@ -11,14 +11,14 @@
 			title: 'Horizontal',
 			path: 'charts/bar/horizontal.html'
 		}, {
-			title: 'Multi axis',
-			path: 'charts/bar/multi-axis.html'
+			title: 'Multi axis (skipped)',
+			path: '#'
 		}, {
 			title: 'Stacked',
 			path: 'charts/bar/stacked.html'
 		}, {
-			title: 'Stacked groups',
-			path: 'charts/bar/stacked-group.html'
+			title: 'Stacked groups (skipped)',
+			path: '#'
 		}]
 	}, {
 		title: 'Line charts',
@@ -26,23 +26,20 @@
 			title: 'Basic',
 			path: 'charts/line/basic.html'
 		}, {
-			title: 'Multi axis',
-			path: 'charts/line/multi-axis.html'
+			title: 'Multi axis (skipped)',
+			path: '#'
 		}, {
 			title: 'Stepped',
 			path: 'charts/line/stepped.html'
 		}, {
-			title: 'Interpolation',
-			path: 'charts/line/interpolation-modes.html'
+			title: 'Interpolation (skipped)',
+			path: '#'
 		}, {
 			title: 'Line styles',
 			path: 'charts/line/line-styles.html'
 		}, {
 			title: 'Point styles',
 			path: 'charts/line/point-styles.html'
-		}, {
-			title: 'Point sizes',
-			path: 'charts/line/point-sizes.html'
 		}]
 	}, {
 		title: 'Area charts',
@@ -62,129 +59,28 @@
 	}, {
 		title: 'Other charts',
 		items: [{
-			title: 'Scatter',
-			path: 'charts/scatter/basic.html'
+			title: 'Scatter (skipped)',
+			path: '#'
 		}, {
-			title: 'Scatter - Multi axis',
-			path: 'charts/scatter/multi-axis.html'
+			title: 'Scatter - Multi axis (skipped)',
+			path: '#'
 		}, {
 			title: 'Doughnut',
-			path: 'charts/doughnut.html'
+			path: 'charts/others/doughnut.html'
 		}, {
 			title: 'Pie',
-			path: 'charts/pie.html'
+			path: 'charts/others/pie.html'
 		}, {
 			title: 'Polar area',
-			path: 'charts/polar-area.html'
+			path: 'charts/others/polar-area.html'
 		}, {
 			title: 'Radar',
-			path: 'charts/radar.html'
+			path: 'charts/others/radar.html'
 		}, {
 			title: 'Combo bar/line',
 			path: 'charts/combo-bar-line.html'
 		}]
-	}, {
-		title: 'Linear scale',
-		items: [{
-			title: 'Step size',
-			path: 'scales/linear/step-size.html'
-		}, {
-			title: 'Min & max',
-			path: 'scales/linear/min-max.html'
-		}, {
-			title: 'Min & max (suggested)',
-			path: 'scales/linear/min-max-suggested.html'
-		}]
-	}, {
-		title: 'Logarithmic scale',
-		items: [{
-			title: 'Line',
-			path: 'scales/logarithmic/line.html'
-		}, {
-			title: 'Scatter',
-			path: 'scales/logarithmic/scatter.html'
-		}]
-	}, {
-		title: 'Time scale',
-		items: [{
-			title: 'Line',
-			path: 'scales/time/line.html'
-		}, {
-			title: 'Line (point data)',
-			path: 'scales/time/line-point-data.html'
-		}, {
-			title: 'Time Series',
-			path: 'scales/time/financial.html'
-		}, {
-			title: 'Combo',
-			path: 'scales/time/combo.html'
-		}]
-	}, {
-		title: 'Scale options',
-		items: [{
-			title: 'Grid lines display',
-			path: 'scales/gridlines-display.html'
-		}, {
-			title: 'Grid lines style',
-			path: 'scales/gridlines-style.html'
-		}, {
-			title: 'Multiline labels',
-			path: 'scales/multiline-labels.html'
-		}, {
-			title: 'Filtering Labels',
-			path: 'scales/filtering-labels.html'
-		}, {
-			title: 'Non numeric Y Axis',
-			path: 'scales/non-numeric-y.html'
-		}]
-	}, {
-		title: 'Legend',
-		items: [{
-			title: 'Positioning',
-			path: 'legend/positioning.html'
-		}, {
-			title: 'Point style',
-			path: 'legend/point-style.html'
-		}]
-	}, {
-		title: 'Tooltip',
-		items: [{
-			title: 'Positioning',
-			path: 'tooltips/positioning.html'
-		}, {
-			title: 'Interactions',
-			path: 'tooltips/interactions.html'
-		}, {
-			title: 'Callbacks',
-			path: 'tooltips/callbacks.html'
-		}, {
-			title: 'Border',
-			path: 'tooltips/border.html'
-		}, {
-			title: 'HTML tooltips (line)',
-			path: 'tooltips/custom-line.html'
-		}, {
-			title: 'HTML tooltips (pie)',
-			path: 'tooltips/custom-pie.html'
-		}, {
-			title: 'HTML tooltips (points)',
-			path: 'tooltips/custom-points.html'
-		}]
-	}, {
-		title: 'Scriptable',
-		items: [{
-			title: 'Bubble Chart',
-			path: 'scriptable/bubble.html'
-		}]
-	}, {
-		title: 'Advanced',
-		items: [{
-			title: 'Progress bar',
-			path: 'advanced/progress-bar.html'
-		}, {
-			title: 'Data labelling (plugin)',
-			path: 'advanced/data-labelling.html'
-		}]
-	}];
+	} 
+];
 
 }(this));
