@@ -37,18 +37,19 @@
 
     function generateData() {
       return utils.numbers(inputs);
-    };
+    }
 
     function generateLabels(config) {
       return utils.months({count: inputs.count});
-    };
+    }
 
     utils.srand(65);
 
-    let lineChartData = {
+    let chartData = {
       labels: generateLabels(),
       datasets: [
         {
+          type: 'line',
           backgroundColor: utils.transparentize(presets.red),
           borderColor: presets.red,
           data: generateData(),
@@ -56,40 +57,26 @@
           fill: false
         },
         {
+          type: 'bar',
           backgroundColor: utils.transparentize(presets.orange),
           borderColor: presets.orange,
           data: generateData(),
           hidden: false,
           label: 'D1',
-          fill: false
         },
         {
+          type: 'bar',
           backgroundColor: utils.transparentize(presets.yellow),
           borderColor: presets.yellow,
           data: generateData(),
           label: 'D2',
-          fill: false
-        },
-        {
-          backgroundColor: utils.transparentize(presets.green),
-          borderColor: presets.green,
-          data: generateData(),
-          label: 'D3',
-          fill: false
-        },
-        {
-          backgroundColor: utils.transparentize(presets.blue),
-          borderColor: presets.blue,
-          data: generateData(),
-          label: 'D4',
-          fill: false
         }
       ]
     };
 
     let chart = new Chart('chart-0', {
-      type: 'line',
-      data: lineChartData,
+      type: 'bar',
+      data: chartData,
       options: {
         responsive: true,
         legend: {
@@ -97,36 +84,38 @@
         },
         title: {
           display: true,
-          text: 'Basic Line Chart | Chart.js',
+          text: 'Combo Bar Line Chart | Chart.js',
           fontSize: 16
         },
         hover: {
           mode: 'nearest',
           intersect: true
         },
+        tooltips: {
+          mode: 'index',
+          intersect: true
+        },
         scales: {
-          xAxes: [{
-            display: true,
-            scaleLabel: {
-              display: true,
-              fontSize: 14,
-              labelString: 'Month'
-            }
-          }],
-          yAxes: [{
-            display: true,
-            scaleLabel: {
-              display: true,
-              fontSize: 14,
-              labelString: 'Value'
-            }
-          }]
+            xAxes: [{
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Month'
+                }
+            }],
+            yAxes: [{
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Value'
+                }
+            }]
         }
       }
     });
 
     function randomizeData(btn) {
-      lineChartData.datasets.forEach(function(dataset) {
+      chartData.datasets.forEach(function(dataset) {
         dataset.data = dataset.data.map(() => randomScalingFactor());
       });
 
@@ -135,43 +124,44 @@
 
     function addDataset(btn) {
       let colorNames = Object.keys(presets);
-      let colorName = colorNames[lineChartData.datasets.length % colorNames.length];
+      let colorName = colorNames[chartData.datasets.length % colorNames.length];
       let newDataset = {
-        label: 'D' + lineChartData.datasets.length,
+        type: 'bar',
+        label: 'D' + chartData.datasets.length,
         backgroundColor: presets[colorName],
         borderColor: presets[colorName],
         fill: 'false',
         data: []
       };
 
-      for (var i = 0; i < lineChartData.labels.length; i++) {
+      for (var i = 0; i < chartData.labels.length; i++) {
         newDataset.data.push(randomScalingFactor());
       };
 
-      lineChartData.datasets.push(newDataset);
+      chartData.datasets.push(newDataset);
       chart.update();
     }
 
     function addData(btn) {
-      if (lineChartData.datasets.length > 0) {
-        let month = Months[lineChartData.labels.length % Months.length];
-        lineChartData.labels.push(month);
+      if (chartData.datasets.length > 0) {
+        let month = Months[chartData.labels.length % Months.length];
+        chartData.labels.push(month);
 
-        for (var i = 0; i < lineChartData.datasets.length; i++) {
-          lineChartData.datasets[i].data.push(randomScalingFactor());
+        for (var i = 0; i < chartData.datasets.length; i++) {
+          chartData.datasets[i].data.push(randomScalingFactor());
         }
       }
       chart.update();
     };
 
     function removeDataset(btn) {
-      lineChartData.datasets.splice(-1, 1);
+      chartData.datasets.splice(-1, 1);
       chart.update();
     };
 
     function removeData(btn) {
-      lineChartData.labels.splice(-1, 1);
-      lineChartData.datasets.forEach(function(dataset, datasetIndex) {
+      chartData.labels.splice(-1, 1);
+      chartData.datasets.forEach(function(dataset, datasetIndex) {
         dataset.data.pop();
       });
 

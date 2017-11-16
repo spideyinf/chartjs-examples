@@ -78,7 +78,7 @@
 			path: 'charts/others/radar.html'
 		}, {
 			title: 'Combo bar/line',
-			path: 'charts/combo-bar-line.html'
+			path: 'charts/others/combo-bar-line.html'
 		}]
 	} 
 ];
